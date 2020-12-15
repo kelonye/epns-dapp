@@ -33,3 +33,8 @@ This is a re-implementation of https://app.epns.io, but with the use of an EPNS 
 1. Copy `.env.production.sample` to `.env.production`
 2. Run `yarn build-production`
 3. Serve the generated `build` folder
+
+### Demos
+
+- https://epns.surge.sh (production)
+- https://epns-staging.surge.sh (staging)
