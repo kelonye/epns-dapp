@@ -1,7 +1,6 @@
 import React from 'react';
-import Wallet, { web3Modal } from 'utils/wallet';
+import wallet from 'utils/wallet';
 
-export const wallet = new Wallet();
 const WalletContext = React.createContext(null);
 
 export function WalletProvider({ children }) {
@@ -19,7 +18,7 @@ export function WalletProvider({ children }) {
   }
 
   async function onLoad() {
-    if (web3Modal.cachedProvider) {
+    if (wallet.getIsCached()) {
       await connect();
     }
   }

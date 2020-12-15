@@ -4,7 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import Loader from 'components/Loader';
 import { useChannels } from 'contexts/channels';
-import { wallet, useWallet } from 'contexts/wallet';
+import { useWallet } from 'contexts/wallet';
+import * as epns from 'utils/epns';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -91,23 +92,6 @@ function ChannelListItem({ channel }) {
   const classes = useStyles();
   const { address: connected } = useWallet();
 
-  // const onChangeSubscriptionState = s => this.setIsSubscribed(s);
-  // const onLoad = async () => {
-  //   // let channel;
-  //   // if (connected) {
-  //   //   channel = await wallet.epns.getChannel(channel.id);
-  //   //   channel.onChangeSubscriptionState(onChangeSubscriptionState);
-  //   //   this.setIsSubscribed(await channel.getIsSubscribed());
-  //   // }
-  //   // return () => {
-  //   //   channel.offChangeSubscriptionState(onChangeSubscriptionState);
-  //   // };
-  // };
-
-  // React.useEffect(() => {
-  //   onLoad();
-  // }, [connected]); // eslint-disable-line react-hooks/exhaustive-deps
-
   return (
     <div className={clsx(classes.item, 'flex flex-grow')}>
       <img src={channel.icon} alt={channel.name} className={classes.itemIcon} />
@@ -151,46 +135,25 @@ function ChannelListItem({ channel }) {
 
 function ToggleSubscriptionState({ channelAddress }) {
   // const classes = useStyles();
-  const { address: userAddress } = useWallet();
   const [isSubscribed, setIsSubscribed] = React.useState(false);
   const [isLoaded, setIsLoaded] = React.useState(false);
+  let subscription;
 
   const onToggle = async e => {
-    await wallet.epnsContract[!isSubscribed ? 'subscribe' : 'unsubscribe'](
-      channelAddress
-    );
+    await subscription.toggle();
     setIsSubscribed(!isSubscribed);
   };
 
-  const handle = b => (_channelAddress, _userAddress) => {
-    if (userAddress === _userAddress && _channelAddress === channelAddress) {
-      setIsSubscribed(b);
-    }
-  };
-
-  const on = (event, b) => {
-    const fn = handle(b);
-    wallet.epnsContract.on(event, fn);
-    return () => wallet.epnsContract.off(event, fn);
-  };
-
   const onLoad = async () => {
-    const offs = [
-      on('Subscribe', () => setIsSubscribed(true)),
-      on('Unsubscribe', () => setIsSubscribed(false)),
-    ];
-    setIsSubscribed(
-      await wallet.epnsContract.memberExists(userAddress, channelAddress)
-    );
+    subscription = epns.ChannelSubscription(channelAddress);
+    setIsSubscribed(await subscription.getIsSubscribed());
     setIsLoaded(true);
-    return () => {
-      offs.map(off => off());
-    };
+    return subscription.onChange(setIsSubscribed);
   };
 
   React.useEffect(() => {
     onLoad();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [setIsSubscribed]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Button

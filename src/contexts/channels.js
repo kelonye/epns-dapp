@@ -1,5 +1,6 @@
 import React from 'react';
-import { subgraph } from 'utils/xhr';
+// import { useWallet } from 'contexts/wallet';
+import * as epns from 'utils/epns';
 
 const ChannelsContext = React.createContext(null);
 
@@ -8,22 +9,7 @@ export function ChannelsProvider({ children }) {
   const [channels, setChannels] = React.useState([]);
 
   const load = async () => {
-    const { channels } = await subgraph(
-      `
-        query ($first: Int) {
-          channels(first: $first) {
-            id
-            name
-            info
-            icon
-            url
-          }
-        }
-      `,
-      {
-        first: 20,
-      }
-    );
+    const channels = await epns.query.getChannels();
     setChannels(channels);
     setIsLoading(false);
   };

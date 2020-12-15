@@ -1,29 +1,16 @@
 import React from 'react';
-import { subgraph } from 'utils/xhr';
 import { useWallet } from 'contexts/wallet';
+import * as epns from 'utils/epns';
 
 const NotificationsContext = React.createContext(null);
 
 export function NotificationsProvider({ children }) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [notifications, setNotifications] = React.useState([]);
-  const { address } = useWallet();
+  const { address: userAddress } = useWallet();
 
   const load = async () => {
-    const { notifications } = await subgraph(
-      `
-        query ($userAddress: String) {
-          notifications(where: {userAddress: $userAddress}) {
-            id
-            notificationTitle
-            notificationBody
-          }
-        }
-      `,
-      {
-        userAddress: address,
-      }
-    );
+    const notifications = await epns.query.getNotifications(userAddress);
     setNotifications(notifications);
     setIsLoading(false);
   };

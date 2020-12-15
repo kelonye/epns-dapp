@@ -2,7 +2,7 @@ import NProgress from 'nprogress';
 import Promise from 'bluebird';
 import fetch from 'unfetch';
 import { stringify } from 'query-string';
-import { wallet } from 'contexts/wallet';
+import wallet from 'utils/wallet';
 
 const API_URL = process.env.REACT_APP_API_URL;
 const SUBGRAPH_URL = process.env.REACT_APP_SUBGRAPH_URL;

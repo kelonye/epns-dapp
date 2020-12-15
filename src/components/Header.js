@@ -12,7 +12,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import LightSwitch from 'components/LightSwitch';
 import ConnectWallet from 'components/ConnectWallet';
 import { APP_TITLE } from 'config';
-import { wallet, useWallet } from 'contexts/wallet';
+import { useWallet } from 'contexts/wallet';
+import wallet from 'utils/wallet';
 
 const useStyles = makeStyles(theme => ({
   account: {
