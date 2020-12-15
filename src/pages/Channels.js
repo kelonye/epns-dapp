@@ -11,6 +11,9 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexGrow: 1,
     minHeight: 300,
+    '& button': {
+      width: 135,
+    },
   },
   paddingWrapper: {
     display: 'flex',
@@ -51,7 +54,11 @@ const useStyles = makeStyles(theme => ({
 
 export default function ChannelList() {
   const classes = useStyles();
-  const { isLoading, channels } = useChannels();
+  const { isLoading, load, channels } = useChannels();
+
+  React.useEffect(() => {
+    load();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className={clsx(classes.container, 'flex flex-grow')}>

@@ -28,14 +28,11 @@ export function NotificationsProvider({ children }) {
     setIsLoading(false);
   };
 
-  React.useEffect(() => {
-    address && load();
-  }, [address]); // eslint-disable-line react-hooks/exhaustive-deps
-
   return (
     <NotificationsContext.Provider
       value={{
         isLoading,
+        load,
         notifications,
       }}
     >
@@ -49,9 +46,10 @@ export function useNotifications() {
   if (!context) {
     throw new Error('Missing notifications context');
   }
-  const { isLoading, notifications } = context;
+  const { isLoading, load, notifications } = context;
   return {
     isLoading,
+    load,
     notifications,
   };
 }

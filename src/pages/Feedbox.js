@@ -36,8 +36,12 @@ const useStyles = makeStyles(theme => ({
 
 export default function NotificationList() {
   const classes = useStyles();
-  const { isLoading, notifications } = useNotifications();
+  const { isLoading, load, notifications } = useNotifications();
   const { address: connected } = useWallet();
+
+  React.useEffect(() => {
+    connected && load();
+  }, [connected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className={clsx(classes.container, 'flex flex-col flex-grow')}>

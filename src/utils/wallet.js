@@ -9,7 +9,7 @@ import { slPrompt } from 'utils/sl';
 import EPNS_CONTRACT_ABI from 'abis/epns.json';
 
 const ROPSTEN_EPNS_CONTRACT_ADDRESS =
-  '0xb02E99b9634bD21A8e3E36cc7adb673287A8FeaC';
+  process.env.REACT_APP_ROPSTEN_EPNS_CONTRACT_ADDRESS;
 
 export const web3Modal = new Web3Modal({
   cacheProvider: true,

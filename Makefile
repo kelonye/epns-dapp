@@ -1,17 +1,18 @@
 run: node_modules
 	@yarn start
 
-build:
-	@yarn build
-
 deploy:
-	@yarn build
+	@env-cmd -f .env.production react-scripts build
 	@surge -d https://epns.surge.sh -p build
+
+deploy-staging:
+	@env-cmd -f .env.staging react-scripts build
+	@surge -d https://epns-staging.surge.sh -p build
 
 node_modules:
 	@yarn
 
 .PHONY: \
 	run \
-	build \
-	deploy
+	deploy \
+	deploy-staging

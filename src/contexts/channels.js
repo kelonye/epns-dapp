@@ -28,14 +28,11 @@ export function ChannelsProvider({ children }) {
     setIsLoading(false);
   };
 
-  React.useEffect(() => {
-    load();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
   return (
     <ChannelsContext.Provider
       value={{
         isLoading,
+        load,
         channels,
       }}
     >
@@ -49,9 +46,10 @@ export function useChannels() {
   if (!context) {
     throw new Error('Missing channels context');
   }
-  const { isLoading, channels } = context;
+  const { isLoading, load, channels } = context;
   return {
     isLoading,
+    load,
     channels,
   };
 }
