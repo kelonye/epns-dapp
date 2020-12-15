@@ -39,6 +39,12 @@ const useStyles = makeStyles(theme => ({
       alignItems: 'flex-start',
     },
   },
+  itemMainContentInfo: {
+    paddingRight: 10,
+    [theme.breakpoints.down('sm')]: {
+      paddingRight: 0,
+    },
+  },
   itemIcon: {
     borderRadius: 8,
     marginRight: 20,
@@ -106,7 +112,12 @@ function ChannelListItem({ channel }) {
     <div className={clsx(classes.item, 'flex flex-grow')}>
       <img src={channel.icon} alt={channel.name} className={classes.itemIcon} />
       <div className={classes.itemMainContent}>
-        <div className="flex flex-col flex-grow">
+        <div
+          className={clsx(
+            'flex flex-col flex-grow',
+            classes.itemMainContentInfo
+          )}
+        >
           <div>{channel.name}</div>
           <div>{channel.info}</div>
           <div>

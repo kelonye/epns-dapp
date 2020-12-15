@@ -21,9 +21,10 @@ const useStyles = makeStyles(theme => ({
   container: {
     width: '960px',
     margin: '0 auto',
-    padding: '100px 0 0',
+    padding: '140px 0 30px',
+    position: 'relative',
     [theme.breakpoints.down('sm')]: {
-      padding: '70px 0 0',
+      padding: '130px 0 10px',
       width: 'auto',
     },
   },

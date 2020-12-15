@@ -5,6 +5,25 @@ import { Link, withRouter } from 'react-router-dom';
 import { Paper } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
+  container: {
+    position: 'fixed',
+    top: 64,
+    left: 0,
+    right: 0,
+    backgroundColor: theme.palette.isDark ? '#212121' : 'white',
+    zIndex: 1,
+    [theme.breakpoints.down('sm')]: {
+      top: 56,
+    },
+  },
+  containerInner: {
+    width: 960,
+    margin: '0 auto',
+    paddingTop: 14,
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
+  },
   linkContainer: {
     display: 'flex',
     flexGrow: 1,
@@ -47,34 +66,36 @@ function Component() {
   const isCreateChannel = '#/create-channel' === path;
 
   return (
-    <div className="flex flex-grow">
-      <Link to="/feedbox" className={classes.linkContainer}>
-        <Paper
-          className={clsx(classes.link, {
-            [classes.active]: isFeedbox,
-          })}
-        >
-          Feedbox
-        </Paper>
-      </Link>
-      <Link to="/" className={classes.linkContainer}>
-        <Paper
-          className={clsx(classes.link, {
-            [classes.active]: isChannels,
-          })}
-        >
-          Channels
-        </Paper>
-      </Link>
-      <Link to="/create-channel" className={classes.linkContainer}>
-        <Paper
-          className={clsx(classes.link, {
-            [classes.active]: isCreateChannel,
-          })}
-        >
-          Create Channel
-        </Paper>
-      </Link>
+    <div className={clsx('flex flex-col flex-grow', classes.container)}>
+      <div className={clsx('flex flex-grow', classes.containerInner)}>
+        <Link to="/feedbox" className={classes.linkContainer}>
+          <Paper
+            className={clsx(classes.link, {
+              [classes.active]: isFeedbox,
+            })}
+          >
+            Feedbox
+          </Paper>
+        </Link>
+        <Link to="/" className={classes.linkContainer}>
+          <Paper
+            className={clsx(classes.link, {
+              [classes.active]: isChannels,
+            })}
+          >
+            Channels
+          </Paper>
+        </Link>
+        <Link to="/create-channel" className={classes.linkContainer}>
+          <Paper
+            className={clsx(classes.link, {
+              [classes.active]: isCreateChannel,
+            })}
+          >
+            Create Channel
+          </Paper>
+        </Link>
+      </div>
     </div>
   );
 }
