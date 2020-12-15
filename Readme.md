@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://epns.surge.sh">
-    <img src="https://epns.surge.sh/shot.png" alt="epns" width=400 />
+    <img src="https://epns.surge.sh/shot.png" alt="epns" width=250 />
   </a>
 </div>
 
