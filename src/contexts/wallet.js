@@ -20,7 +20,7 @@ export function WalletProvider({ children }) {
 
   async function onLoad() {
     if (web3Modal.cachedProvider) {
-      connect();
+      await connect();
     }
   }
 

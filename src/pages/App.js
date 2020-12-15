@@ -4,8 +4,8 @@ import {
   ThemeProvider as MuiThemeProvider,
   makeStyles,
 } from '@material-ui/core/styles';
-import { CssBaseline } from '@material-ui/core';
-import { createBrowserHistory } from 'history';
+import { CssBaseline, Paper } from '@material-ui/core';
+import { createHashHistory } from 'history';
 import { useTheme, useMuiTheme } from 'contexts/theme';
 
 import Header from 'components/Header';
@@ -15,15 +15,23 @@ import Channels from './Channels';
 import CreateChannel from './CreateChannel';
 import Feedbox from './Feedbox';
 
-const history = createBrowserHistory();
+const history = createHashHistory();
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   container: {
     width: '960px',
     margin: '0 auto',
+    padding: '100px 0 0',
+    [theme.breakpoints.down('sm')]: {
+      padding: '70px 0 0',
+      width: 'auto',
+    },
   },
   content: {
-    minHeight: 'calc(100vh - 60px)',
+    margin: '20px 15px',
+    [theme.breakpoints.down('sm')]: {
+      margin: '20px 5px',
+    },
   },
   footer: {
     padding: '20px 0 20px',
@@ -51,15 +59,13 @@ export default function App() {
         <div className={classes.container}>
           <Header />
           <SubHeader />
-          <div className="flex-grow">
-            <div className={classes.content}>
-              <Switch>
-                <Route path={'/:create-channel'} component={CreateChannel} />
-                <Route path={'/:feedbox'} component={Feedbox} />
-                <Route path={'/'} component={Channels} />
-              </Switch>
-            </div>
-          </div>
+          <Paper className={classes.content}>
+            <Switch>
+              <Route path={'/:create-channel'} component={CreateChannel} />
+              <Route path={'/:feedbox'} component={Feedbox} />
+              <Route path={'/'} component={Channels} />
+            </Switch>
+          </Paper>
         </div>
       </Router>
     </MuiThemeProvider>

@@ -5,10 +5,11 @@ import { stringify } from 'query-string';
 import { wallet } from 'contexts/wallet';
 
 const API_URL = process.env.REACT_APP_API_URL;
-const SUBGRAPH_URL = '';
+const SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/vbstreetz/epns';
 
-export function subgraph(query, variables) {
-  return xhr('post', SUBGRAPH_URL, { query, variables });
+export async function subgraph(query, variables) {
+  const { data } = await xhr('post', SUBGRAPH_URL, { query, variables });
+  return data;
 }
 
 export function xhr(method, url, payload, headers = {}) {

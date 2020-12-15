@@ -10,18 +10,33 @@ import {
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import LightSwitch from 'components/LightSwitch';
+import ConnectWallet from 'components/ConnectWallet';
 import { APP_TITLE } from 'config';
 import { wallet, useWallet } from 'contexts/wallet';
 
 const useStyles = makeStyles(theme => ({
   account: {
     marginRight: 10,
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
+  },
+  backToHome: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
+  },
+  subtitle: {
+    fontSize: 9,
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
   },
 }));
 
 export default function Component() {
   const classes = useStyles();
-  const { address, connect, disconnect } = useWallet();
+  const { address, disconnect } = useWallet();
 
   const shortAddress =
     address && `${address.slice(0, 6)}....${address.slice(-4)}`;
@@ -35,13 +50,14 @@ export default function Component() {
           aria-label="menu"
           to={'/'}
           component={Link}
+          className={classes.backToHome}
         >
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" className={'flex flex-grow'}>
           <div className={'flex flex-col'}>
             <div>{APP_TITLE}</div>
-            <div style={{ fontSize: 9 }}>
+            <div className={classes.subtitle}>
               Ethereum Push Notification Service
             </div>
           </div>
@@ -58,9 +74,7 @@ export default function Component() {
             </Button>
           </>
         ) : (
-          <Button color="secondary" onClick={connect}>
-            Connect Wallet
-          </Button>
+          <ConnectWallet />
         )}
 
         <LightSwitch />
