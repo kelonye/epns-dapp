@@ -1,7 +1,7 @@
 run: node_modules
 	@yarn start
 
-deploy:
+deploy-production:
 	@yarn build-production
 	@surge -d https://epns.surge.sh -p build
 
@@ -14,5 +14,5 @@ node_modules:
 
 .PHONY: \
 	run \
-	deploy \
+	deploy-production \
 	deploy-staging

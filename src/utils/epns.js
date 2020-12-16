@@ -1,3 +1,4 @@
+import _memoize from 'lodash/memoize';
 import * as epns from 'epns-sdk';
 import wallet from 'utils/wallet';
 
@@ -7,9 +8,16 @@ const ROPSTEN_EPNS_CONTRACT_ADDRESS =
 
 export const query = new epns.Query(SUBGRAPH_URL);
 
-export const ChannelSubscription = channelAddress =>
-  new epns.ChannelSubscription(
-    ROPSTEN_EPNS_CONTRACT_ADDRESS,
-    wallet.ethersWallet,
-    channelAddress
-  );
+export const ChannelSubscription = _memoize(
+  channelAddress =>
+    new epns.ChannelSubscription(
+      ROPSTEN_EPNS_CONTRACT_ADDRESS,
+      wallet.ethersWallet,
+      channelAddress
+    )
+);
+
+export const ChannelOwner = _memoize(
+  () =>
+    new epns.ChannelOwner(ROPSTEN_EPNS_CONTRACT_ADDRESS, wallet.ethersWallet)
+);

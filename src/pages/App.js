@@ -12,8 +12,9 @@ import Header from 'components/Header';
 import SubHeader from 'components/SubHeader';
 
 import Channels from './Channels';
-import CreateChannel from './CreateChannel';
 import Feedbox from './Feedbox';
+import CreateChannel from './CreateChannel';
+import ManageChannel from './ManageChannel';
 
 const history = createHashHistory();
 
@@ -62,8 +63,9 @@ export default function App() {
           <SubHeader />
           <Paper className={classes.content}>
             <Switch>
-              <Route path={'/:create-channel'} component={CreateChannel} />
-              <Route path={'/:feedbox'} component={Feedbox} />
+              <Route path={'/create-channel'} component={CreateChannel} />
+              <Route path={'/manage-channel'} component={ManageChannel} />
+              <Route path={'/feedbox'} component={Feedbox} />
               <Route path={'/'} component={Channels} />
             </Switch>
           </Paper>

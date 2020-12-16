@@ -1,7 +1,14 @@
 import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { TextField, Button } from '@material-ui/core';
+import {
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
 import Loader from 'components/Loader';
 import ConnectWallet from 'components/ConnectWallet';
@@ -10,6 +17,15 @@ import { useWallet } from 'contexts/wallet';
 import * as epns from 'utils/epns';
 import sl from 'utils/sl';
 
+const NOTIFICATION_TYPE_BROADCAST = 'BROADCAST';
+const NOTIFICATION_TYPE_SECRET = 'SECRET';
+const NOTIFICATION_TYPE_TARGETED = 'TARGETED';
+
+const NOTIFICATION_TYPES = [
+  NOTIFICATION_TYPE_BROADCAST,
+  NOTIFICATION_TYPE_SECRET,
+  NOTIFICATION_TYPE_TARGETED,
+];
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
@@ -54,25 +70,30 @@ export default function Wrapper() {
         <div className={classes.paddingWrapper}>
           <Loader />
         </div>
-      ) : ownsChannel ? (
-        <Redirect to="/manage-channel" />
+      ) : !ownsChannel ? (
+        <Redirect to="/create-channel" />
       ) : (
         <div className={classes.paddingWrapper}>
-          <CreateChannel />
+          <ManageChannel />
         </div>
       )}
     </div>
   );
 }
 
-function CreateChannel() {
+function ManageChannel() {
   const classes = useStyles();
+  const [type, setType] = React.useState(NOTIFICATION_TYPE_BROADCAST);
+  const isSecretOrTargeted = ~[
+    NOTIFICATION_TYPE_SECRET,
+    NOTIFICATION_TYPE_TARGETED,
+  ].indexOf(type);
 
-  const onCreate = async e => {
+  const onSendNotification = async e => {
     e.preventDefault();
     const form = e.target;
-    const props = {};
-    ['name', 'info', 'url', 'icon'].forEach(key => {
+    const props = { type: NOTIFICATION_TYPES.indexOf(type) + 1 };
+    ['msg', 'recipientAddress', 'sub', 'cta', 'img'].forEach(key => {
       const val = form[key]?.value?.trim();
       if (val) {
         props[key] = val;
@@ -80,50 +101,95 @@ function CreateChannel() {
     });
     console.log(props);
 
-    sl('warning', 'Todo..');
+    await epns
+      .ChannelOwner()
+      .notify(
+        props.type,
+        props.msg,
+        props.recipientAddress,
+        props.sub,
+        props.cta,
+        props.img
+      );
 
-    // await epns
-    //   .ChannelOwner()
-    //   .create(props.name, props.info, props.url, props.icon);
+    sl('success', 'Notification has been sent!');
 
-    // sl('success', 'Channel created!');
-
-    // form.reset();
+    form.reset();
   };
 
   return (
     <form
       className={clsx('flex flex-col flex-grow', classes.form)}
-      onSubmit={onCreate}
+      onSubmit={onSendNotification}
     >
       <div className={classes.formRow}>
+        <FormControl fullWidth>
+          <InputLabel id="typeLabel">Type *</InputLabel>
+          <Select
+            labelId="typeLabel"
+            id="type"
+            value={type}
+            onChange={event => setType(event.target.value)}
+          >
+            {NOTIFICATION_TYPES.map(t => (
+              <MenuItem value={t} key={t}>
+                {t} (IPFS PAYLOAD)
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+      {!isSecretOrTargeted ? null : (
+        <div className={classes.formRow}>
+          <TextField
+            id="recipientAddress"
+            label="Recipient Address"
+            type="text"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            fullWidth
+            required
+          />
+        </div>
+      )}
+      <div className={classes.formRow}>
         <TextField
-          id="name"
-          label="Name"
+          id="sub"
+          label="Subject (optional)"
           type="text"
           InputLabelProps={{
             shrink: true,
           }}
           fullWidth
-          required
         />
       </div>
       <div className={classes.formRow}>
         <TextField
-          id="url"
-          label="Website"
+          id="cta"
+          label="CTA link (optional)"
           type="url"
           InputLabelProps={{
             shrink: true,
           }}
           fullWidth
-          required
         />
       </div>
       <div className={classes.formRow}>
         <TextField
-          id="info"
-          label="Description"
+          id="img"
+          label="Media link (optional)"
+          type="url"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          fullWidth
+        />
+      </div>
+      <div className={classes.formRow}>
+        <TextField
+          id="msg"
+          label="Message"
           type="text"
           InputLabelProps={{
             shrink: true,
@@ -142,7 +208,7 @@ function CreateChannel() {
           className={classes.formButton}
           type="submit"
         >
-          Create
+          Send Notification
         </Button>
       </div>
     </form>

@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link, withRouter } from 'react-router-dom';
 import { Paper } from '@material-ui/core';
+import { useChannelOwner } from 'contexts/channel-owner';
+import { useWallet } from 'contexts/wallet';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -59,11 +61,17 @@ const useStyles = makeStyles(theme => ({
 
 function Component() {
   const classes = useStyles();
-
   const path = window.location.hash;
   const isFeedbox = '#/feedbox' === path;
   const isChannels = '#/' === path;
   const isCreateChannel = '#/create-channel' === path;
+  const isManageChannel = '#/manage-channel' === path;
+  const { ownsChannel, load: loadManageChannel } = useChannelOwner();
+  const { address: connected } = useWallet();
+
+  React.useEffect(() => {
+    connected && loadManageChannel();
+  }, [connected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className={clsx('flex flex-col flex-grow', classes.container)}>
@@ -86,15 +94,27 @@ function Component() {
             Channels
           </Paper>
         </Link>
-        <Link to="/create-channel" className={classes.linkContainer}>
-          <Paper
-            className={clsx(classes.link, {
-              [classes.active]: isCreateChannel,
-            })}
-          >
-            Create Channel
-          </Paper>
-        </Link>
+        {ownsChannel ? (
+          <Link to="/manage-channel" className={classes.linkContainer}>
+            <Paper
+              className={clsx(classes.link, {
+                [classes.active]: isManageChannel,
+              })}
+            >
+              Manage Channel
+            </Paper>
+          </Link>
+        ) : (
+          <Link to="/create-channel" className={classes.linkContainer}>
+            <Paper
+              className={clsx(classes.link, {
+                [classes.active]: isCreateChannel,
+              })}
+            >
+              Create Channel
+            </Paper>
+          </Link>
+        )}
       </div>
     </div>
   );

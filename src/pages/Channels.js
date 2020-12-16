@@ -137,15 +137,15 @@ function ToggleSubscriptionState({ channelAddress }) {
   // const classes = useStyles();
   const [isSubscribed, setIsSubscribed] = React.useState(false);
   const [isLoaded, setIsLoaded] = React.useState(false);
-  let subscription;
 
   const onToggle = async e => {
+    const subscription = epns.ChannelSubscription(channelAddress);
     await subscription.toggle();
     setIsSubscribed(!isSubscribed);
   };
 
   const onLoad = async () => {
-    subscription = epns.ChannelSubscription(channelAddress);
+    const subscription = epns.ChannelSubscription(channelAddress);
     setIsSubscribed(await subscription.getIsSubscribed());
     setIsLoaded(true);
     return subscription.onChange(setIsSubscribed);

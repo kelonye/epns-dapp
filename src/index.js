@@ -8,6 +8,7 @@ import { ThemeProvider } from 'contexts/theme';
 import { WalletProvider } from 'contexts/wallet';
 import { ChannelsProvider } from 'contexts/channels';
 import { NotificationsProvider } from 'contexts/notifications';
+import { ChannelOwnerProvider } from 'contexts/channel-owner';
 import App from 'pages/App';
 
 (async () => {
@@ -22,7 +23,9 @@ import App from 'pages/App';
       <ThemeProvider>
         <ChannelsProvider>
           <NotificationsProvider>
-            <App />
+            <ChannelOwnerProvider>
+              <App />
+            </ChannelOwnerProvider>
           </NotificationsProvider>
         </ChannelsProvider>
       </ThemeProvider>
