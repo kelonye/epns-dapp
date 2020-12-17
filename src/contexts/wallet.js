@@ -4,6 +4,7 @@ import wallet from 'utils/wallet';
 const WalletContext = React.createContext(null);
 
 export function WalletProvider({ children }) {
+  const [isLoading, setIsLoading] = React.useState(true);
   const [address, setAddress] = React.useState(null);
 
   async function connect() {
@@ -17,19 +18,21 @@ export function WalletProvider({ children }) {
     setAddress(wallet.address);
   }
 
-  async function onLoad() {
+  async function load() {
     if (wallet.getIsCached()) {
       await connect();
     }
+    setIsLoading(false);
   }
 
   React.useEffect(() => {
-    onLoad();
+    load();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <WalletContext.Provider
       value={{
+        isLoading,
         address,
         connect,
         disconnect,
@@ -45,9 +48,10 @@ export function useWallet() {
   if (!context) {
     throw new Error('Missing wallet context');
   }
-  const { address, connect, disconnect } = context;
+  const { isLoading, address, connect, disconnect } = context;
 
   return {
+    isLoading,
     address,
     connect,
     disconnect,

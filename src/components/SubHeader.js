@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Link, withRouter } from 'react-router-dom';
 import { Paper } from '@material-ui/core';
 import { useChannelOwner } from 'contexts/channel-owner';
-import { useWallet } from 'contexts/wallet';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -66,12 +65,7 @@ function Component() {
   const isChannels = '#/' === path;
   const isCreateChannel = '#/create-channel' === path;
   const isManageChannel = '#/manage-channel' === path;
-  const { ownsChannel, load: loadManageChannel } = useChannelOwner();
-  const { address: connected } = useWallet();
-
-  React.useEffect(() => {
-    connected && loadManageChannel();
-  }, [connected]); // eslint-disable-line react-hooks/exhaustive-deps
+  const { ownsChannel } = useChannelOwner();
 
   return (
     <div className={clsx('flex flex-col flex-grow', classes.container)}>

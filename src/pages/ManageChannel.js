@@ -53,22 +53,18 @@ const useStyles = makeStyles(theme => ({
 
 export default function Wrapper() {
   const classes = useStyles();
-  const { isLoading, load, ownsChannel } = useChannelOwner();
+  const { isLoading, ownsChannel } = useChannelOwner();
   const { address: connected } = useWallet();
-
-  React.useEffect(() => {
-    connected && load();
-  }, [connected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className={clsx(classes.container, 'flex flex-col flex-grow')}>
-      {!connected ? (
-        <div className={classes.paddingWrapper}>
-          <ConnectWallet />
-        </div>
-      ) : isLoading ? (
+      {isLoading ? (
         <div className={classes.paddingWrapper}>
           <Loader />
+        </div>
+      ) : !connected ? (
+        <div className={classes.paddingWrapper}>
+          <ConnectWallet />
         </div>
       ) : !ownsChannel ? (
         <Redirect to="/create-channel" />
@@ -92,7 +88,7 @@ function ManageChannel() {
   const onSendNotification = async e => {
     e.preventDefault();
     const form = e.target;
-    const props = { type: NOTIFICATION_TYPES.indexOf(type) + 1 };
+    const props = { type: (NOTIFICATION_TYPES.indexOf(type) + 1).toString() };
     ['msg', 'recipientAddress', 'sub', 'cta', 'img'].forEach(key => {
       const val = form[key]?.value?.trim();
       if (val) {

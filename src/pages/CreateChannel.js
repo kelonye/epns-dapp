@@ -37,22 +37,18 @@ const useStyles = makeStyles(theme => ({
 
 export default function Wrapper() {
   const classes = useStyles();
-  const { isLoading, load, ownsChannel } = useChannelOwner();
+  const { isLoading, ownsChannel } = useChannelOwner();
   const { address: connected } = useWallet();
-
-  React.useEffect(() => {
-    connected && load();
-  }, [connected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className={clsx(classes.container, 'flex flex-col flex-grow')}>
-      {!connected ? (
-        <div className={classes.paddingWrapper}>
-          <ConnectWallet />
-        </div>
-      ) : isLoading ? (
+      {isLoading ? (
         <div className={classes.paddingWrapper}>
           <Loader />
+        </div>
+      ) : !connected ? (
+        <div className={classes.paddingWrapper}>
+          <ConnectWallet />
         </div>
       ) : ownsChannel ? (
         <Redirect to="/manage-channel" />

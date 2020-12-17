@@ -61,11 +61,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function ChannelList() {
   const classes = useStyles();
-  const { isLoading, load, channels } = useChannels();
-
-  React.useEffect(() => {
-    load();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const { isLoading, channels } = useChannels();
 
   return (
     <div className={clsx(classes.container, 'flex flex-grow')}>
