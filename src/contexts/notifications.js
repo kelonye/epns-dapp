@@ -9,6 +9,9 @@ export function NotificationsProvider({ children }) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [notifications, setNotifications] = React.useState([]);
   const { isLoading: isLoadingWallet, address } = useWallet();
+  const [toast, showToast] = React.useState(null);
+
+  const clearToast = () => showToast(null);
 
   const load = async () => {
     if (!isLoadingWallet) {
@@ -30,6 +33,7 @@ export function NotificationsProvider({ children }) {
   };
 
   const onAdd = async notification => {
+    showToast(notification);
     setNotifications([notification].concat(notifications));
   };
 
@@ -43,6 +47,8 @@ export function NotificationsProvider({ children }) {
       value={{
         isLoading,
         notifications,
+        toast,
+        clearToast,
       }}
     >
       {children}
@@ -55,9 +61,11 @@ export function useNotifications() {
   if (!context) {
     throw new Error('Missing notifications context');
   }
-  const { isLoading, notifications } = context;
+  const { isLoading, notifications, toast, clearToast } = context;
   return {
     isLoading,
     notifications,
+    toast,
+    clearToast,
   };
 }

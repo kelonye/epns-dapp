@@ -10,6 +10,7 @@ import { useTheme, useMuiTheme } from 'contexts/theme';
 
 import Header from 'components/Header';
 import SubHeader from 'components/SubHeader';
+import NotificationToasts from 'components/NotificationToasts';
 
 import Channels from './Channels';
 import Feedbox from './Feedbox';
@@ -69,6 +70,7 @@ export default function App() {
               <Route path={'/'} component={Channels} />
             </Switch>
           </Paper>
+          <NotificationToasts />
         </div>
       </Router>
     </MuiThemeProvider>
