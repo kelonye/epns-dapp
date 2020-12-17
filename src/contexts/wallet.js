@@ -21,6 +21,8 @@ export function WalletProvider({ children }) {
   async function load() {
     if (wallet.getIsCached()) {
       await connect();
+    } else {
+      await wallet.setFallbackProvider();
     }
     setIsLoading(false);
   }

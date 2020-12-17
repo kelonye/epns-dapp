@@ -11,10 +11,12 @@ export function ChannelsProvider({ children }) {
   const { isLoading: isLoadingWallet } = useWallet();
 
   const load = async () => {
-    setIsLoading(true);
-    const channels = await epns.Query().getChannels();
-    setChannels(channels);
-    setIsLoading(false);
+    if (!isLoadingWallet) {
+      setIsLoading(true);
+      const channels = await epns.Query().getChannels();
+      setChannels(channels);
+      setIsLoading(false);
+    }
   };
 
   const subscribe = () => {

@@ -25,8 +25,30 @@ const web3Modal = new Web3Modal({
 
 class Wallet {
   async connect() {
-    this.web3Provider = await web3Modal.connect();
-    this.ethersProvider = new ethers.providers.Web3Provider(this.web3Provider);
+    const provider = await web3Modal.connect();
+    provider.on('accountsChanged', () => {
+      window.location.reload();
+    });
+    provider.on('chainChanged', () => {
+      window.location.reload();
+    });
+    // provider.on('disconnect', () => {
+    //   disconnect();
+    // });
+    await this.setProvider(new ethers.providers.Web3Provider(provider));
+
+    this.ethersWallet = this.ethersProvider.getSigner();
+    this.address = await this.ethersWallet.getAddress();
+  }
+
+  async setFallbackProvider() {
+    await this.setProvider(
+      new ethers.providers.InfuraProvider('ropsten', INFURA_ID)
+    );
+  }
+
+  async setProvider(provider) {
+    this.ethersProvider = provider;
     this.net = await this.ethersProvider.getNetwork();
 
     if (this.getNetworkName() !== 'ropsten') {
@@ -36,19 +58,6 @@ class Wallet {
         this.disconnect.bind(this)
       );
     }
-
-    this.ethersWallet = this.ethersProvider.getSigner();
-    this.address = await this.ethersWallet.getAddress();
-
-    this.web3Provider.on('accountsChanged', () => {
-      window.location.reload();
-    });
-    this.web3Provider.on('chainChanged', () => {
-      window.location.reload();
-    });
-    // web3Provider.on('disconnect', () => {
-    //   disconnect();
-    // });
   }
 
   async disconnect() {
