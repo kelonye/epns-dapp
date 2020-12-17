@@ -25,7 +25,6 @@ const useStyles = makeStyles(theme => ({
   item: {
     padding: 20,
     lineHeight: '1.5rem',
-    alignItems: 'center',
     [theme.breakpoints.down('sm')]: {
       alignItems: 'flex-start',
     },
@@ -51,6 +50,7 @@ const useStyles = makeStyles(theme => ({
     marginRight: 20,
     width: 80,
     height: 80,
+    marginTop: 10,
     [theme.breakpoints.down('sm')]: {
       width: 40,
       height: 40,

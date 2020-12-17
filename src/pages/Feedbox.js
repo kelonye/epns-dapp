@@ -79,8 +79,8 @@ function NotificationListItem({ notification }) {
           .local()
           .format('YYYY-MM-DD h:mm:ss a')}
       </div>
-      <div>{notification.notificationTitle}</div>
-      <div>{notification.notificationBody}</div>
+      <div>{notification.title}</div>
+      <div>{notification.body}</div>
     </div>
   );
 }

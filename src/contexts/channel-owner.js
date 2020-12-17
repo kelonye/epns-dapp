@@ -6,6 +6,7 @@ const ChannelOwnerContext = React.createContext(null);
 
 export function ChannelOwnerProvider({ children }) {
   const [isLoading, setIsLoading] = React.useState(true);
+  const [channel, setChannel] = React.useState(null);
   const [ownsChannel, setOwnsChannel] = React.useState(false);
   const { isLoading: isLoadingWallet, address } = useWallet();
 
@@ -13,7 +14,12 @@ export function ChannelOwnerProvider({ children }) {
     if (!isLoadingWallet) {
       if (address) {
         setIsLoading(true);
-        setOwnsChannel(await epns.ChannelOwner().getIsCreated());
+        const [ownsChannel, channel] = await Promise.all([
+          epns.ChannelOwner().getIsCreated(),
+          epns.Query().getChannel(address),
+        ]);
+        setChannel(channel);
+        setOwnsChannel(ownsChannel);
       }
       setIsLoading(false);
     }
@@ -27,6 +33,7 @@ export function ChannelOwnerProvider({ children }) {
     <ChannelOwnerContext.Provider
       value={{
         isLoading,
+        channel,
         ownsChannel,
       }}
     >
@@ -40,9 +47,10 @@ export function useChannelOwner() {
   if (!context) {
     throw new Error('Missing channel owner context');
   }
-  const { isLoading, ownsChannel } = context;
+  const { isLoading, channel, ownsChannel } = context;
   return {
     isLoading,
+    channel,
     ownsChannel,
   };
 }

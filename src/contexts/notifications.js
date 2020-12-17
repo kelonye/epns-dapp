@@ -1,4 +1,5 @@
 import React from 'react';
+import _noop from 'lodash/noop';
 import * as epns from 'utils/epns';
 import { useWallet } from 'contexts/wallet';
 
@@ -13,14 +14,28 @@ export function NotificationsProvider({ children }) {
     if (!isLoadingWallet) {
       if (address) {
         setIsLoading(true);
-        setNotifications(await epns.query.getNotifications(address));
+        setNotifications(await epns.Query().getNotifications(address));
       }
       setIsLoading(false);
     }
   };
 
+  const subscribe = () => {
+    if (!isLoadingWallet) {
+      if (address) {
+        return epns.Notifications().onSend(onAdd);
+      }
+    }
+    return _noop;
+  };
+
+  const onAdd = async notification => {
+    setNotifications([notification].concat(notifications));
+  };
+
   React.useEffect(() => {
     load();
+    return subscribe();
   }, [isLoadingWallet, address]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (

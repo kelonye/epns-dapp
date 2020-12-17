@@ -49,6 +49,9 @@ const useStyles = makeStyles(theme => ({
     margin: '10px 0',
   },
   formButton: {},
+  channelName: {
+    color: theme.palette.secondary.main,
+  },
 }));
 
 export default function Wrapper() {
@@ -80,6 +83,8 @@ export default function Wrapper() {
 function ManageChannel() {
   const classes = useStyles();
   const [type, setType] = React.useState(NOTIFICATION_TYPE_BROADCAST);
+  const { channel } = useChannelOwner();
+
   const isSecretOrTargeted = ~[
     NOTIFICATION_TYPE_SECRET,
     NOTIFICATION_TYPE_TARGETED,
@@ -118,6 +123,9 @@ function ManageChannel() {
       className={clsx('flex flex-col flex-grow', classes.form)}
       onSubmit={onSendNotification}
     >
+      <div className={classes.formRow}>
+        <div className={classes.channelName}>{channel.name}</div>
+      </div>
       <div className={classes.formRow}>
         <FormControl fullWidth>
           <InputLabel id="typeLabel">Type *</InputLabel>
