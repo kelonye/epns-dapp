@@ -13,8 +13,8 @@ export function ChannelsProvider({ children }) {
   const load = async () => {
     if (!isLoadingWallet) {
       setIsLoading(true);
-      const channels = await epns.Query().getChannels();
-      setChannels(channels);
+      const cs = await epns.Query().getChannels();
+      setChannels(() => cs);
       setIsLoading(false);
     }
   };
@@ -27,7 +27,7 @@ export function ChannelsProvider({ children }) {
   };
 
   const onAdd = async channel => {
-    setChannels([channel].concat(channels));
+    setChannels(channels => [channel].concat(channels));
   };
 
   React.useEffect(() => {

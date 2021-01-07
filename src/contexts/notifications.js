@@ -17,7 +17,8 @@ export function NotificationsProvider({ children }) {
     if (!isLoadingWallet) {
       if (address) {
         setIsLoading(true);
-        setNotifications(await epns.Query().getNotifications(address));
+        const ns = await epns.Query().getNotifications(address);
+        setNotifications(() => ns);
       }
       setIsLoading(false);
     }
@@ -26,15 +27,15 @@ export function NotificationsProvider({ children }) {
   const subscribe = () => {
     if (!isLoadingWallet) {
       if (address) {
-        return epns.Notifications().onSend(onAdd);
+        return epns.Notifications().onReceive(onReceive);
       }
     }
     return _noop;
   };
 
-  const onAdd = async notification => {
+  const onReceive = async notification => {
     showToast(notification);
-    setNotifications([notification].concat(notifications));
+    setNotifications(notifications => [notification].concat(notifications));
   };
 
   React.useEffect(() => {

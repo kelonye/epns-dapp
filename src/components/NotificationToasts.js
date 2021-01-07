@@ -33,16 +33,15 @@ export default function() {
   return (
     <Snackbar
       open={!!toast}
-      onClose={clearToast}
       message={
         !toast ? null : (
           <div className={clsx(classes.container, 'flex flex-col flex-grow')}>
-            {/*<div className={classes.date}>
+            <div className={classes.date}>
               {moment
                 .unix(toast.indexTimestamp)
                 .local()
                 .format('YYYY-MM-DD h:mm:ss a')}
-              </div>*/}
+            </div>
             <div>{toast.title}</div>
             <div>{toast.body}</div>
           </div>

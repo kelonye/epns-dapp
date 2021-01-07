@@ -7,7 +7,7 @@ import Loader from 'components/Loader';
 import ConnectWallet from 'components/ConnectWallet';
 import { useChannelOwner } from 'contexts/channel-owner';
 import { useWallet } from 'contexts/wallet';
-import * as epns from 'utils/epns';
+// import * as epns from 'utils/epns';
 import sl from 'utils/sl';
 
 const useStyles = makeStyles(theme => ({
