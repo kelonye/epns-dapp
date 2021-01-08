@@ -18,6 +18,12 @@ This is a re-implementation of https://app.epns.io, but with the use of an EPNS 
 #### Running the app
 
 - Run `yarn` to install node packages.
+- If actively working on the epns-sdk, you can link to the dapp by:
+
+  - cd into `epns-sdk` and run `yarn link`
+  - cd back into this dapp and run: `yarnlink epns-sdk`
+  - you will need to ran `yarn link epns-sdk` everytime you ran yarn
+
 - Copy `.env.development.sample` `.env.development` and configure appropriately.
 - Run `make` to boot app.
 - Visit frontend at http://localhost:5555 (or configured port).
