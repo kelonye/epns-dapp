@@ -21,7 +21,7 @@ This is a re-implementation of https://app.epns.io, but with the use of an EPNS 
 - If actively working on the epns-sdk, you can link to the dapp by:
 
   - cd into `epns-sdk` and run `yarn link`
-  - cd back into this dapp and run: `yarnlink epns-sdk`
+  - cd back into this dapp and run: `yarn link epns-sdk`
   - you will need to ran `yarn link epns-sdk` everytime you ran yarn
 
 - Copy `.env.development.sample` `.env.development` and configure appropriately.
