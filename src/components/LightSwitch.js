@@ -1,7 +1,7 @@
 import React from 'react';
 import { IconButton, Tooltip } from '@material-ui/core';
-import LightIcon from '@material-ui/icons/WbIncandescent';
-import DarkIcon from '@material-ui/icons/Brightness4';
+import LightIcon from '@material-ui/icons/Brightness1';
+import DarkIcon from '@material-ui/icons/Brightness2';
 import { useTheme } from 'contexts/theme';
 
 export default function() {
